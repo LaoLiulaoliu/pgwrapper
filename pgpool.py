@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# Author: Yuande Liu <miracle (at) gmail.com>
+# Author: Yuande Liu <miraclecome (at) gmail.com>
+
 # Add a connection pool for postgresql
+
+from __future__ import print_function, division
 
 import sys
 import Queue
@@ -75,7 +78,7 @@ class PGPool(object):
             except Exception as e:
                 conn = None
                 retry += 1
-                print e
+                print(e)
             else:
                 yielded = True
                 retry = 0
