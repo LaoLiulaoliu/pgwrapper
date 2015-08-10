@@ -20,7 +20,7 @@ class PGWrapper(PGPool):
 
 
     def select(self, table, args='*', condition=None, control=None):
-        """.. :py:method::
+        """.. :py:method:: select
 
             General select form of select
 
@@ -40,7 +40,7 @@ class PGWrapper(PGPool):
 
 
     def update(self, table, kwargs, condition=None):
-        """.. :py:method::
+        """.. :py:method:: update
 
             All module update can user this function.
             condition only support string and dictionary.
