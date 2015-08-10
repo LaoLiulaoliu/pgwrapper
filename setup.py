@@ -4,14 +4,17 @@
 
 from __future__ import print_function, division
 
-from distutils.core import setup
+#from distutils.core import setup
+from setuptools import setup, Extension
 
 setup(
     name = 'pgwrapper',
     version = '0.1',
+    packages = ['pgwrapper'],
     author = 'Clark Liu',
     author_email = 'miraclecome@gmail.com',
     url = 'https://coding.net/u/clarke/p/pgwrapper/git/archive/master',
+    install_requires=[ 'psycopg2 >= 2.6.0', ],
     description = 'A simple, fast way to access postgresql',
     classifiers = [
         "Programming Language :: Python :: 2.7",

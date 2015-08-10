@@ -20,7 +20,10 @@ class PGWrapper(PGPool):
 
 
     def select(self, table, args='*', condition=None, control=None):
-        """ General select form of select
+        """.. :py:method::
+
+            General select form of select
+
         Usage::
 
             >>> select('hospital', 'id, city', control='limit 1')
@@ -37,8 +40,11 @@ class PGWrapper(PGPool):
 
 
     def update(self, table, kwargs, condition=None):
-        """ All module update can user this function.
-        condition only support string and dictionary.
+        """.. :py:method::
+
+            All module update can user this function.
+            condition only support string and dictionary.
+
         Usage::
 
             >>> update('dept', {'name': 'design', 'quantity': 3}, {'id': 'we4d'})
@@ -83,7 +89,8 @@ class PGWrapper(PGPool):
 
 
     def delete(self, table, condition):
-        """
+        """.. :py:method::
+
         Usage::
 
             >>> delete('hospital', {'id': '12de3wrv'})
@@ -96,7 +103,8 @@ class PGWrapper(PGPool):
 
 
     def insert_inexistence(self, table, kwargs, condition):
-        """
+        """.. :py:method::
+
         Usage::
 
             >>> insert('hospital', {'id': '12de3wrv', 'province': 'shanghai'}, {'id': '12de3wrv'})
@@ -113,7 +121,9 @@ class PGWrapper(PGPool):
 
 
     def parse_condition(self, condition):
-        """ parse the condition, support string and dictonary
+        """.. :py:method::
+
+            parse the condition, support string and dictonary
         """
         if isinstance(condition, bytes):
             sql = " where {}".format(condition)
@@ -132,7 +142,8 @@ class PGWrapper(PGPool):
 
 
     def select_join(self, table, field, join_table, join_field):
-        """
+        """.. :py:method::
+
         Usage::
 
             >>> select_join('hospital', 'id', 'department', 'hospid')
@@ -152,7 +163,8 @@ class PGWrapper(PGPool):
                     join_table, join_fields,
                     condition_field, condition_join_field,
                     join_method='left_join'):
-        """
+        """.. :py:method::
+
         Usage::
 
             >>> joint('user', 'name, id_number', 'medical_card', 'number', 'id', 'user_id', 'inner_join')

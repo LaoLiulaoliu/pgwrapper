@@ -26,7 +26,9 @@ class PGPool(object):
                  poolsize=3,
                  maxretries=5,
                  fetch_size=400):
-        """ pg_hba.conf: host trust
+        """ .. :py:class::
+
+            pg_hba.conf: host trust
         """
         self.dbname = dbname
         self.user = user
@@ -57,7 +59,9 @@ class PGPool(object):
         self.queue.put(conn)
 
     def _create_connection(self):
-        """ If we hava several hosts, we can random choice one to connect
+        """.. :py:method::
+
+              If we hava several hosts, we can random choice one to connect
         """
         db = psycopg2.connect(database=self.dbname,
                                 user=self.user, password=self.password,
@@ -134,7 +138,9 @@ class PGPool(object):
                     results = cur.fetchmany(1000)
 
     def batch(self, sqls):
-        """ batch execute queries.
+        """.. :py:method::
+
+            batch execute queries.
             only support `insert` and `update`, have more efficiency
         """
         with self.connection() as cur:
