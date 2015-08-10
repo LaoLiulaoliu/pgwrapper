@@ -7,11 +7,12 @@ from __future__ import print_function, division
 from distutils.core import setup
 
 setup(
-    name = 'pgwrapper'
-    version = '0.1'
-    author = 'Clark Liu'
-    author_email = 'miraclecome@gmail.com'
-    description = 'A simple, fast way to access postgresql'
+    name = 'pgwrapper',
+    version = '0.1',
+    author = 'Clark Liu',
+    author_email = 'miraclecome@gmail.com',
+    url = 'https://coding.net/u/clarke/p/pgwrapper/git/archive/master',
+    description = 'A simple, fast way to access postgresql',
     classifiers = [
         "Programming Language :: Python :: 2.7",
         "Development Status :: 4 - Beta",
