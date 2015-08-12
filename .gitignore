@@ -1,2 +1,4 @@
 MANIFEST
 *.pyc
+dist
+pgwrapper.egg-info
