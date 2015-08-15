@@ -20,7 +20,7 @@ class PGPool(object):
     def __init__(self,
                  dbname='postgres',
                  user='postgres',
-                 password='1qaz2wsx',
+                 password='',
                  host='127.0.0.1',
                  port=5432,
                  poolsize=3,
