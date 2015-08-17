@@ -25,6 +25,7 @@ class PGPool(object):
                  port=5432,
                  poolsize=3,
                  maxretries=5,
+                 debug=False,
                  fetch_size=400):
         """ .. :py:class::
 
@@ -37,6 +38,7 @@ class PGPool(object):
         self.port = port
         self.poolsize = poolsize
         self.maxretries = maxretries
+        self.debug = debug
         self.fetch_size = fetch_size
         self.queue = Queue.Queue(self.poolsize)
         self.connection_in_use = 0
@@ -106,7 +108,9 @@ class PGPool(object):
             True for `select`, False for `insert` and `update`
         """
         with self.connection() as cur:
-#            print(cur.mogrify(query, vars))
+            if self.debug:
+                print(cur.mogrify(query, vars))
+
             resp = cur.execute(query, vars)
 
             if result == False:

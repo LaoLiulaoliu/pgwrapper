@@ -14,9 +14,11 @@ class PGWrapper(PGPool):
             host='127.0.0.1',
             port=5432,
             poolsize=3,
-            maxretries=5):
+            maxretries=5,
+            debug=False):
         super(PGWrapper, self).__init__(dbname, user, password,
-                                        host, port, poolsize, maxretries)
+                                        host, port, poolsize,
+                                        maxretries, debug)
 
 
     def select(self, table, args='*', condition=None, control=None):
