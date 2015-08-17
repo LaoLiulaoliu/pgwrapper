@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # Author: Yuande Liu <miraclecome (at) gmail.com>
 
-from __future__ import print_function, division
+from __future__ import division, absolute_import, print_function
 
 from pgpool import PGPool
 

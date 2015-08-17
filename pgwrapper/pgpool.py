@@ -4,7 +4,7 @@
 
 # Add a connection pool for postgresql
 
-from __future__ import print_function, division
+from __future__ import division, absolute_import, print_function
 
 import sys
 import Queue
