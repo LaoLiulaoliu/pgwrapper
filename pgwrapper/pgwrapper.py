@@ -4,7 +4,7 @@
 
 from __future__ import division, absolute_import, print_function
 
-from pgpool import PGPool
+from  pgwrapper.pgpool import PGPool
 
 class PGWrapper(PGPool):
     def __init__(self,

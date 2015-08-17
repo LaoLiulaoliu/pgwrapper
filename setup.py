@@ -9,7 +9,7 @@ from setuptools import setup, Extension
 
 setup(
     name = 'pgwrapper',
-    version = '0.1.4',
+    version = '0.1.6',
     packages = ['pgwrapper'],
     author = 'Clark Liu',
     author_email = 'miraclecome@gmail.com',
