@@ -10,7 +10,7 @@ class PGWrapper(PGPool):
     def __init__(self,
             dbname='postgres',
             user='postgres',
-            password='1qaz2wsx',
+            password='',
             host='127.0.0.1',
             port=5432,
             poolsize=3,
@@ -75,19 +75,28 @@ class PGWrapper(PGPool):
         super(PGWrapper, self).execute(sql, values, result=False)
 
 
-    def insert(self, table, kwargs):
-        """
+    def insert(self, table, kwargs, execute=True):
+        """.. :py:method::
+
         Usage::
 
             >>> insert('hospital', {'id': '12de3wrv', 'province': 'shanghai'})
             insert into hospital (id, province) values ('12de3wrv', 'shanghai');
+
+        :param string table: table name
+        :param dict kwargs: name and value
+        :param bool execute: if not execute, return sql and variables
+        :rtype: tuple
 
         """
         sql = "insert into " + table + " ({}) values ({});"
         keys, values = [], []
         [ (keys.append(k), values.append(v)) for k, v in kwargs.iteritems() ]
         sql = sql.format(', '.join(keys), ', '.join(['%s']*len(values)))
-        super(PGWrapper, self).execute(sql, values, result=False)
+        if execute:
+            super(PGWrapper, self).execute(sql, values, result=False)
+        else:
+            return sql, values
 
 
     def delete(self, table, condition):

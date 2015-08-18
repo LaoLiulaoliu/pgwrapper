@@ -132,6 +132,9 @@ class PGPool(object):
             True for `select`, False for `insert` and `update`
         """
         with self.connection() as cur:
+            if self.debug:
+                print(cur.mogrify(query, vars))
+
             resp = cur.execute(query, vars)
 
             if result == True:
@@ -141,13 +144,20 @@ class PGPool(object):
                     yield QueryResult(columns, results)
                     results = cur.fetchmany(1000)
 
-    def batch(self, sqls):
+
+    def batch(self, queries):
         """.. :py:method::
 
+        :param tuple queries: [(sql, vars), (sql, vars), ...]
+
+        .. note::
             batch execute queries.
             only support `insert` and `update`, have more efficiency
         """
         with self.connection() as cur:
-            for sql in sqls:
-                cur.execute(query)
+            for sql, vars in queries:
+
+                if self.debug:
+                    print(cur.mogrify(query, vars))
+                cur.execute(sql, vars)
 
