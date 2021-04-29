@@ -10,7 +10,7 @@
 
 * It is a mongo-like query formula system upper layer.
 
-* It is a rough version to access postgresql in python2.
+* It is a new version to access postgresql in python3.
 
 
 ### Install

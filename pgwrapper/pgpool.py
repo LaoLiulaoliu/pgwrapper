@@ -1,19 +1,18 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # Author: Yuande Liu <miraclecome (at) gmail.com>
 
 # Add a connection pool for postgresql
 
-from __future__ import division, absolute_import, print_function
 
 import sys
-import Queue
+import queue
 import psycopg2
 from collections import namedtuple
 from contextlib import contextmanager
 
-
 QueryResult = namedtuple('RowResult', ('columns', 'results'))
+
 
 class PGPool(object):
 
@@ -40,9 +39,8 @@ class PGPool(object):
         self.maxretries = maxretries
         self.debug = debug
         self.fetch_size = fetch_size
-        self.queue = Queue.Queue(self.poolsize)
+        self.queue = queue.Queue(self.poolsize)
         self.connection_in_use = 0
-
 
     def clear(self):
         while not self.queue.empty():
@@ -66,8 +64,8 @@ class PGPool(object):
               If we hava several hosts, we can random choice one to connect
         """
         db = psycopg2.connect(database=self.dbname,
-                                user=self.user, password=self.password,
-                                host=self.host, port=self.port)
+                              user=self.user, password=self.password,
+                              host=self.host, port=self.port)
         if 'psycopg2.extras' in sys.modules:
             psycopg2.extras.register_hstore(db)
         return db
@@ -88,7 +86,7 @@ class PGPool(object):
             else:
                 yielded = True
                 retry = 0
-                conn.commit() # commit `insert`, `update` and `delete`
+                conn.commit()  # commit `insert`, `update` and `delete`
             finally:
                 if conn is not None:
                     cur.close()
@@ -96,7 +94,6 @@ class PGPool(object):
 
         if yielded is False:
             raise Exception('Could not obtain cursor, max retry {} reached.'.format(retry))
-
 
     def execute(self, query, vars=None, result=False):
         """.. :py:method::
@@ -121,7 +118,6 @@ class PGPool(object):
                 results = cur.fetchall()
                 return QueryResult(columns, results)
 
-
     def execute_generator(self, query, vars=None, result=False):
         """.. :py:method::
 
@@ -144,7 +140,6 @@ class PGPool(object):
                     yield QueryResult(columns, results)
                     results = cur.fetchmany(1000)
 
-
     def batch(self, queries):
         """.. :py:method::
 
@@ -158,6 +153,5 @@ class PGPool(object):
             for sql, vars in queries:
 
                 if self.debug:
-                    print(cur.mogrify(query, vars))
+                    print(cur.mogrify(sql, vars))
                 cur.execute(sql, vars)
-
