@@ -2,3 +2,7 @@ MANIFEST
 *.pyc
 dist
 pgwrapper.egg-info
+
+_build/
+_static/
+_templates/
