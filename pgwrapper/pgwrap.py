@@ -111,7 +111,7 @@ class PGWrapper(PGPool):
 
         Usage::
 
-            >>> insert('hospital', ['id', 'province'], ['12de3wrv', 'shanghai'])
+            >>> insert_list('hospital', ['id', 'province'], ['12de3wrv', 'shanghai'])
             insert into hospital (id, province) values ('12de3wrv', 'shanghai');
 
         :param string table: table name
@@ -154,7 +154,7 @@ class PGWrapper(PGPool):
 
         Usage::
 
-            >>> insert('hospital', {'id': '12de3wrv', 'province': 'shanghai'}, {'id': '12de3wrv'})
+            >>> insert_inexistence('hospital', {'id': '12de3wrv', 'province': 'shanghai'}, {'id': '12de3wrv'})
             insert into hospital (id, province) select '12de3wrv', 'shanghai' where not exists (select 1 from hospital where id='12de3wrv' limit 1);
 
         """
