@@ -15,3 +15,15 @@
 
 ### Install
 pip install pgwrapper
+
+
+### Issue
+
+```Error: pg_config executable not found.```
+If you meet this following error when installing psycopg2, you may need to install extra library.
+
+In Ubuntu:
+```sudo apt install libpq-dev```
+
+In macOs:
+```brew install postgresql```
