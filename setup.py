@@ -8,9 +8,9 @@ from setuptools import setup, Extension
 
 setup(
     name = 'pgwrapper',
-    version = '0.2.0',
+    version = '0.2.1',
     packages = ['pgwrapper'],
-    author = 'Clark Liu',
+    author = 'Richard Liu',
     author_email = 'miraclecome@gmail.com',
     url = 'https://github.com/LaoLiulaoliu/pgwrapper',
     install_requires=[ 'psycopg2 >= 2.8.5', ],

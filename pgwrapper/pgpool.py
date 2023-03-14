@@ -155,3 +155,13 @@ class PGPool(object):
                 if self.debug:
                     print(cur.mogrify(sql, vars))
                 cur.execute(sql, vars)
+
+    def transaction(self, sqls):
+        with self.connection() as cur:
+            for sql in sqls:
+
+                if isinstance(sql, tuple):
+                    cur.execute(sql[0], sql[1])
+                else:
+                    cur.execute(sql)
+

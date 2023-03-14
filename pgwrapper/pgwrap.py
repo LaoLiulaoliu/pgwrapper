@@ -20,7 +20,7 @@ class PGWrapper(PGPool):
                                         host, port, poolsize,
                                         maxretries, debug)
 
-    def select(self, table, args='*', condition=None, control=None):
+    def select(self, table, args='*', condition=None, control=None, dryrun=False):
         """.. :py:method:: select
 
             General select form of select
@@ -37,9 +37,12 @@ class PGWrapper(PGPool):
         """
         sql = 'select {} from {}'.format(args, table)
         sql += self.parse_condition(condition) + (' {};'.format(control) if control else ';')
+        if dryrun:
+            return sql
         return super(PGWrapper, self).execute(sql, result=True).results
 
-    def update(self, table, kwargs, condition=None):
+
+    def update(self, table, kwargs, condition=None, dryrun=False):
         """.. :py:method:: update
 
             All module update can user this function.
@@ -70,9 +73,12 @@ class PGWrapper(PGPool):
 
         sql = sql.format(table, ', '.join(equations))
         sql += self.parse_condition(condition) + ";"
+        if dryrun:
+            return sql, values
         super(PGWrapper, self).execute(sql, values, result=False)
 
-    def insert(self, table, kwargs, execute=True):
+
+    def insert(self, table, kwargs, returning=False, dryrun=False):
         """.. :py:method::
 
         Usage::
@@ -82,7 +88,7 @@ class PGWrapper(PGPool):
 
         :param string table: table name
         :param dict kwargs: name and value
-        :param bool execute: if not execute, return sql and variables
+        :param bool dryrun: if dryrun, return sql and variables
         :rtype: tuple
 
         """
@@ -90,12 +96,17 @@ class PGWrapper(PGPool):
         keys, values = [], []
         [(keys.append(k), values.append(v)) for k, v in kwargs.items()]
         sql = sql.format(', '.join(keys), ', '.join(['%s'] * len(values)))
-        if execute:
-            super(PGWrapper, self).execute(sql, values, result=False)
-        else:
+        sql = sql[:-1] + ' returning *;' if returning else sql
+        if dryrun:
             return sql, values
 
-    def insert_list(self, table, names, values, execute=True):
+        if returning:
+            return super(PGWrapper, self).execute(sql, values, result=True)
+        else:
+            super(PGWrapper, self).execute(sql, values, result=False)
+
+
+    def insert_list(self, table, names, values, returning=False, dryrun=False):
         """.. :py:method::
 
         Usage::
@@ -106,18 +117,23 @@ class PGWrapper(PGPool):
         :param string table: table name
         :param list names: name
         :param list values: value
-        :param bool execute: if not execute, return sql and variables
+        :param bool dryrun: if dryrun, return sql and variables
         :rtype: tuple
 
         """
         sql = "insert into " + table + " ({}) values ({});"
         sql = sql.format(', '.join(names), ', '.join(['%s'] * len(values)))
-        if execute:
-            super(PGWrapper, self).execute(sql, values, result=False)
-        else:
+        sql = sql[:-1] + ' returning *;' if returning else sql
+        if dryrun:
             return sql, values
 
-    def delete(self, table, condition):
+        if returning:
+            return super(PGWrapper, self).execute(sql, values, result=True)
+        else:
+            super(PGWrapper, self).execute(sql, values, result=False)
+
+
+    def delete(self, table, condition, dryrun=False):
         """.. :py:method::
 
         Usage::
@@ -128,9 +144,12 @@ class PGWrapper(PGPool):
         """
         sql = "delete from {}".format(table)
         sql += self.parse_condition(condition) + ";"
+        if dryrun:
+            return sql
         super(PGWrapper, self).execute(sql, result=False)
 
-    def insert_inexistence(self, table, kwargs, condition):
+
+    def insert_inexistence(self, table, kwargs, condition, returning=False, dryrun=False):
         """.. :py:method::
 
         Usage::
@@ -145,7 +164,16 @@ class PGWrapper(PGPool):
         keys, values = [], []
         [(keys.append(k), values.append(v)) for k, v in kwargs.items()]
         sql = sql.format(', '.join(keys)) + select.format(', '.join(['%s'] * len(values))) + condition
-        super(PGWrapper, self).execute(sql, values, result=False)
+        sql = sql[:-1] + ' returning *;' if returning else sql
+
+        if dryrun:
+            return sql, values
+
+        if returning:
+            return super(PGWrapper, self).execute(sql, values, result=True)
+        else:
+            super(PGWrapper, self).execute(sql, values, result=False)
+
 
     def parse_condition(self, condition):
         """.. :py:method::
@@ -159,12 +187,13 @@ class PGWrapper(PGPool):
             for k, v in condition.items():
                 s = "{}='{}'".format(k, v) if isinstance(v, str) else "{}={}".format(k, v)
                 conditions.append(s)
-            sql = " where {}".format(', '.join(conditions))
+            sql = " where {}".format(' and '.join(conditions))
         else:
             sql = ""
         return sql
 
-    def select_join(self, table, field, join_table, join_field):
+
+    def select_join(self, table, field, join_table, join_field, dryrun=False):
         """.. :py:method::
 
         Usage::
@@ -179,12 +208,21 @@ class PGWrapper(PGPool):
                                                                 field=field,
                                                                 join_table=join_table,
                                                                 join_field=join_field)
+        if dryrun:
+            return sql
+
         return super(PGWrapper, self).execute(sql, result=True).results
 
-    def joint(self, table, fields,
-              join_table, join_fields,
-              condition_field, condition_join_field,
-              join_method='left_join'):
+
+    def joint(self,
+            table,
+            fields,
+            join_table,
+            join_fields,
+            condition_field,
+            condition_join_field,
+            join_method='left_join',
+            dryrun=False):
         """.. :py:method::
 
         Usage::
@@ -208,4 +246,6 @@ class PGWrapper(PGPool):
                                                  join_table=join_table,
                                                  condition_field=condition_field,
                                                  condition_join_field=condition_join_field)
+        if dryrun:
+            return sql
         return super(PGWrapper, self).execute(sql, result=True).results
