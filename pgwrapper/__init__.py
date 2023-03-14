@@ -2,4 +2,4 @@
 # -*- coding: utf-8 -*-
 # Author: Yuande Liu <miraclecome (at) gmail.com>
 
-from pgwrap import PGWrapper
+from .pgwrap import PGWrapper

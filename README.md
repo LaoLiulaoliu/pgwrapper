@@ -4,7 +4,6 @@
 
 
 ### Description
-==============
 
 * It is a postgresql python connection pool at lower layer.
 

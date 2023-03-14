@@ -5,6 +5,10 @@
 
 #from distutils.core import setup
 from setuptools import setup, Extension
+from pathlib import Path
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 setup(
     name = 'pgwrapper',
@@ -24,9 +28,6 @@ setup(
         "Operating System :: OS Independent",
         "Topic :: Software Development :: Libraries :: Python Modules",
         ],
-    long_description = """
-        - It is a postgresql python connection pool at lower layer.
-        - It is a mongo-like query formula system upper layer.
-        - It is a new version to access postgresql in python3.
-    """
+    long_description = long_description,
+    long_description_content_type="text/markdown"
 )

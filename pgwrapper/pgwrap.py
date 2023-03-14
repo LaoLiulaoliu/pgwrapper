@@ -3,7 +3,7 @@
 # Author: Yuande Liu <miraclecome (at) gmail.com>
 
 
-from db.pgpool import PGPool
+from .pgpool import PGPool
 
 
 class PGWrapper(PGPool):
