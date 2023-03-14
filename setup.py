@@ -12,7 +12,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name = 'pgwrapper',
-    version = '0.2.1',
+    version = '0.3.0',
     packages = ['pgwrapper'],
     author = 'Richard Liu',
     author_email = 'miraclecome@gmail.com',
