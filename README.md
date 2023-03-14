@@ -18,6 +18,19 @@ pip install pgwrapper
 
 ### Usage
 
+```
+>>> import pgwrapper
+>>> pg = pgwrapper.PGWrapper(
+        dbname='postgres',
+        user='postgres',
+        password='',
+        host='127.0.0.1',
+        port=5432)
+>>> r = pg.select('company', 'id, name', 'address is not null', 'limit 2')
+>>> print(r)
+
+[(12, 'sun'), (34, 'moon')]
+```
 
 ###### select
 ```
