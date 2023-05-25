@@ -164,4 +164,3 @@ class PGPool(object):
                     cur.execute(sql[0], sql[1])
                 else:
                     cur.execute(sql)
-

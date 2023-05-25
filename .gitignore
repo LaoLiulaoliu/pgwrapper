@@ -3,6 +3,7 @@ MANIFEST
 dist
 pgwrapper.egg-info
 
+.idea/
 _build/
 _static/
 _templates/
