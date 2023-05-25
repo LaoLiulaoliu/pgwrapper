@@ -12,15 +12,15 @@ long_description = (this_directory / "README.md").read_text()
 
 setup(
     name = 'pgwrapper',
-    version = '0.3.1',
+    version = '0.3.2',
     packages = ['pgwrapper'],
     author = 'Richard Liu',
     author_email = 'miraclecome@gmail.com',
     url = 'https://github.com/LaoLiulaoliu/pgwrapper',
-    install_requires=[ 'psycopg2 >= 2.8.5', ],
+    install_requires=[ 'psycopg2 >= 2.9.6', ],
     description = 'A simple, fast way to access postgresql',
     classifiers = [
-        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.10",
         "Development Status :: 4 - Beta",
         "Environment :: Other Environment",
         "Intended Audience :: Developers",

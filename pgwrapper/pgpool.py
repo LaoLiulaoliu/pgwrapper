@@ -71,7 +71,7 @@ class PGPool(object):
         return db
 
     @contextmanager
-    def connection(self):
+    def connection(self, dryrun=False):
         yielded = False
         retry = 0
         while yielded is False and retry < self.maxretries:
@@ -86,27 +86,30 @@ class PGPool(object):
             else:
                 yielded = True
                 retry = 0
-                conn.commit()  # commit `insert`, `update` and `delete`
+                if not dryrun:
+                    conn.commit()  # commit `insert`, `update` and `delete`
             finally:
-                if conn is not None:
+                if cur:
                     cur.close()
+                if conn:
                     self.put(conn)
 
         if yielded is False:
             raise Exception('Could not obtain cursor, max retry {} reached.'.format(retry))
 
-    def execute(self, query, vars=None, result=False):
+    def execute(self, query, vars=None, result=False, dryrun=False):
         """.. :py:method::
 
         :param bool result: whether query return result
-        :rtype: bool
+        :param bool dryrun: whether just return sql
+        :rtype: sql str for dryrun, QueryResult for result
 
         .. note::
             True for `select`, False for `insert` and `update`
         """
-        with self.connection() as cur:
-            if self.debug:
-                print(cur.mogrify(query, vars))
+        with self.connection(dryrun) as cur:
+            if dryrun:
+                return cur.mogrify(query, vars)
 
             resp = cur.execute(query, vars)
 
@@ -118,7 +121,7 @@ class PGPool(object):
                 results = cur.fetchall()
                 return QueryResult(columns, results)
 
-    def execute_generator(self, query, vars=None, result=False):
+    def execute_generator(self, query, vars=None, result=False, dryrun=False):
         """.. :py:method::
 
         :param bool result: whether query return result
@@ -127,9 +130,9 @@ class PGPool(object):
         .. note::
             True for `select`, False for `insert` and `update`
         """
-        with self.connection() as cur:
-            if self.debug:
-                print(cur.mogrify(query, vars))
+        with self.connection(dryrun) as cur:
+            if dryrun:
+                return cur.mogrify(query, vars)
 
             resp = cur.execute(query, vars)
 
