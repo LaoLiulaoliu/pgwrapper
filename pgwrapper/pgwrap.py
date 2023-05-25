@@ -70,7 +70,7 @@ class PGWrapper(PGPool):
                 values.append(v)
 
         sql = (f"update {table} set {', '.join(equations)}"
-               "{self.parse_condition(condition)};")
+               f"{self.parse_condition(condition)};")
         if dryrun:
             return sql, values
         super(PGWrapper, self).execute(sql, values, result=False)
@@ -91,8 +91,8 @@ class PGWrapper(PGPool):
         """
         keys, values = [], []
         [(keys.append(k), values.append(v)) for k, v in kwargs.items()]
-        sql = (f"insert into {table} ({', '.join(keys)}) "
-               "values ({', '.join(['%s'] * len(values))});")
+        sql = (f"insert into {table} ({', '.join(keys)}) values "
+               f"({', '.join(['%s'] * len(values))});")
         sql = sql[:-1] + ' returning *;' if returning else sql
         if dryrun:
             return sql, values
@@ -117,8 +117,8 @@ class PGWrapper(PGPool):
         :rtype: tuple
 
         """
-        sql = (f"insert into {table} ({', '.join(names)}) "
-               "values ({', '.join(['%s'] * len(values))});")
+        sql = (f"insert into {table} ({', '.join(names)}) values "
+               f"({', '.join(['%s'] * len(values))});")
         sql = sql[:-1] + ' returning *;' if returning else sql
         if dryrun:
             return sql, values
@@ -151,12 +151,12 @@ class PGWrapper(PGPool):
             insert into hospital (id, province) select '12de3wrv', 'shanghai' where not exists (select 1 from hospital where id='12de3wrv' limit 1);
 
         """
-        sql = "insert into " + table + " ({}) "
-        select = "select {} "
-        condition = "where not exists (select 1 from " + table + "{} limit 1);".format(self.parse_condition(condition))
         keys, values = [], []
         [(keys.append(k), values.append(v)) for k, v in kwargs.items()]
-        sql = sql.format(', '.join(keys)) + select.format(', '.join(['%s'] * len(values))) + condition
+        sql = (f"insert into {table} ({', '.join(keys)}) "
+               f"select {', '.join(['%s'] * len(values))} "
+               f"where not exists (select 1 from {table}"
+               f"{self.parse_condition(condition)} limit 1);")
         sql = sql[:-1] + ' returning *;' if returning else sql
 
         if dryrun:
