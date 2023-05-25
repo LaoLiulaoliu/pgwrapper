@@ -69,7 +69,8 @@ class PGWrapper(PGPool):
                 equations.append(f'{k}=%s')
                 values.append(v)
 
-        sql = f"update {table} set {', '.join(equations)}{self.parse_condition(condition)};"
+        sql = (f"update {table} set {', '.join(equations)}"
+               "{self.parse_condition(condition)};")
         if dryrun:
             return sql, values
         super(PGWrapper, self).execute(sql, values, result=False)
@@ -88,10 +89,10 @@ class PGWrapper(PGPool):
         :rtype: tuple
 
         """
-        sql = "insert into " + table + " ({}) values ({});"
         keys, values = [], []
         [(keys.append(k), values.append(v)) for k, v in kwargs.items()]
-        sql = sql.format(', '.join(keys), ', '.join(['%s'] * len(values)))
+        sql = (f"insert into {table} ({', '.join(keys)}) "
+               "values ({', '.join(['%s'] * len(values))});")
         sql = sql[:-1] + ' returning *;' if returning else sql
         if dryrun:
             return sql, values
@@ -116,8 +117,8 @@ class PGWrapper(PGPool):
         :rtype: tuple
 
         """
-        sql = "insert into " + table + " ({}) values ({});"
-        sql = sql.format(', '.join(names), ', '.join(['%s'] * len(values)))
+        sql = (f"insert into {table} ({', '.join(names)}) "
+               "values ({', '.join(['%s'] * len(values))});")
         sql = sql[:-1] + ' returning *;' if returning else sql
         if dryrun:
             return sql, values
@@ -136,8 +137,7 @@ class PGWrapper(PGPool):
             delete from hospital where id='12de3wrv';
 
         """
-        sql = "delete from {}".format(table)
-        sql += self.parse_condition(condition) + ";"
+        sql = f'delete from {table}{self.parse_condition(condition)};'
         if dryrun:
             return sql
         super(PGWrapper, self).execute(sql, result=False)

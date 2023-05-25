@@ -4,6 +4,7 @@ dist
 pgwrapper.egg-info
 
 .idea/
+build/
 _build/
 _static/
 _templates/
