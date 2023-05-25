@@ -59,17 +59,19 @@ class PGWrapper(PGPool):
             update physician set status=status+-10, present=0 where id='someid';
 
         """
+        sql = "update {} set {}"
         equations = []
         values = []
         for k, v in kwargs.items():
             if k == '$inc' and isinstance(v, dict):
                 for ik, iv in v.items():
-                    equations.append(f'{ik}={ik}+{iv}')
+                    equations.append("{field}={field}+{value}".format(field=ik, value=iv))
             else:
-                equations.append(f'{k}=%s')
+                equations.append("{}=%s".format(k))
                 values.append(v)
 
-        sql = f"update {table} set {', '.join(equations)}{self.parse_condition(condition)};"
+        sql = sql.format(table, ', '.join(equations))
+        sql += self.parse_condition(condition) + ";"
         if dryrun:
             return sql, values
         super(PGWrapper, self).execute(sql, values, result=False)
